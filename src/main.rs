@@ -363,13 +363,38 @@ fn compound_types() {
         }
     }
     fn slice() {
+        //! a reference to contiguous of elements in a collection
+        //! borrow part of a collection.
+        //! can be created from arrays, vectors, Strings and other collections implementing Deref trait.
+        //! Slice is composed of pointer and length: both of type u_size. In our case 64bit machine- 8 bytes.
 
+        let mut a = [1, 2, 3, 4, 5];
+        let mut sl = &mut a[1..3];
+        assert_eq!(sl, &[2, 3]);
+
+        sl[0] = 20;
+        assert_eq!(20, a[1]);
+
+        let arr: [char; 3] = ['中', '国', '人'];
+        let sl: &[char] = &arr[..];
+        assert_eq!(std::mem::size_of_val(&sl), 16);
+
+        let s: String = String::from("中国人");
+        let sl: &str = &s[..3]; // 中 takes 3 bytes
+        assert_eq!(sl, "中");
+
+        // a ref to a string can implicitly convert into a str slice.
+        let mut s = String::from("hello");
+        let slice0 = &s[..1];   // implicitly convert into a str slice
+        println!("s[0] = {}", slice0);
+        s.clear();
+        // If we were to put the s.clear() above the println!() we will get an error since s is ""
     }
     fn tuple() {}
     fn struct_type() {}
     fn enum_type() {}
 
-    slice();
+    tuple();
 }
 
 fn flow_control() {}
